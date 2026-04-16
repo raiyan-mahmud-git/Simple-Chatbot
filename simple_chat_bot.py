@@ -2,7 +2,7 @@ import re
 import random
 
 class RuleBot:
-    # responses to exit the chat
+    # responses to exit
     exit_commands = ("quit", "pause", "exit", "goodbye", "bye", "later")
 
     def __init__(self):
@@ -29,7 +29,8 @@ class RuleBot:
                 "I can tell you about myself, the weather, or just chat.",
                 "I'm here to help! Try asking about my name or how I'm doing."
             ],
-    #  when the bot is confused
+            
+    #  when confused
             r'.*': [
                 "That's interesting! Tell me more.",
                 "I'm not sure I follow, could you rephrase that?",
@@ -47,6 +48,7 @@ class RuleBot:
                 print("Bot: Goodbye! Have a great day.")
                 return True
         return False
+        
 
     def chat(self):
         while True:
@@ -63,7 +65,7 @@ class RuleBot:
                 return random.choice(responses)
         return "I'm not sure what you mean."
 
-# Run the bot
+
 if __name__ == "__main__":
     lex = RuleBot()
     lex.greet()
