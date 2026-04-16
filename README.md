@@ -2,7 +2,7 @@
 A rule-based Python chatbot using Regex for pattern matching. It recognizes user intent within sentences and selects randomized responses from a dictionary, balancing structured logic with a natural, conversational feel.
 
 
-# 🤖 Rai: A Rule-Based Python Chatbot
+# Rai: A Rule-Based Python Chatbot
 
 A lightweight, pattern-matching chatbot built with Python. Rai uses Regular Expressions (Regex) to understand user intent and provides randomized responses to simulate a more natural conversation.
 
