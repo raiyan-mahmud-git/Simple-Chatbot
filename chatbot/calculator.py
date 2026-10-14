@@ -1,8 +1,4 @@
-"""A small, safe calculator.
-
-It parses the math with Python's `ast` module and only accepts numbers and
-basic operators, so it never calls eval() on user input.
-"""
+""" A small, safe calculator """
 
 import ast
 import math
@@ -13,7 +9,7 @@ MAX_EXPONENT = 100
 
 
 class CalculatorError(Exception):
-    """Raised with a friendly message when a calculation can't be done."""
+    
 
 
 _BINARY_OPERATORS = {
