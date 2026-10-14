@@ -17,11 +17,11 @@ MAX_EXIT_WORDS = 3  # only short messages count as goodbyes
 MAX_NAME_LENGTH = 30
 STUCK_AFTER = 3  # confusing messages in a row before suggesting 'help'
 
-# Words the typo fixer may correct to. Kept small and specific so that normal
+
 # words are never rewritten by accident.
 KEYWORDS = ["weather", "thanks", "thank", "hello", "goodbye", "joke", "calculate", "support"]
 MIN_TYPO_LENGTH = 5
-TYPO_CUTOFF = 0.88  # strict: "whether" must not become "weather"
+TYPO_CUTOFF = 0.88 
 
 MATH_WORDS = [
     ("to the power of", "^"),
@@ -49,13 +49,12 @@ class RuleBot:
         self._clock = clock
         self._rng = rng or random.Random()
         self._last_reply = None
-        self._pending = None  # what the bot is waiting for, e.g. an answer to "how are you?"
+        self._pending = None 
         self._fallback_streak = 0
         self._load_memory()
 
-        # Rules are checked from top to bottom and the first match wins, so put
-        # specific rules before general ones. Each rule is (pattern, response):
-        # a list of replies to choose from, or a method that builds the reply.
+        
+        
         raw_rules = [
             (r"\bforget (?:me|my name)\b", self._forget_name),
             (r"\bmy name is (\w+)", self._remember_name),
@@ -74,17 +73,17 @@ class RuleBot:
             (r"\b(?:help|support)\b|\bwhat can you do\b", R.HELP),
             (r"\b(?:hi|hello|hey)\b", R.GREETINGS),
         ]
-        # Compile once instead of on every message
+        # Compile once
         self.rules = [(re.compile(pattern), response) for pattern, response in raw_rules]
 
-    # ------------------------------------------------------------ memory
+    #  memory
     def _load_memory(self):
         if not self._memory_path:
             return
         try:
             data = json.loads(self._memory_path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            return  # missing or corrupt file: start fresh
+            return  
         if isinstance(data, dict) and isinstance(data.get("user_name"), str):
             self.user_name = data["user_name"]
 
@@ -94,9 +93,9 @@ class RuleBot:
         try:
             self._memory_path.write_text(json.dumps({"user_name": self.user_name}), encoding="utf-8")
         except OSError:
-            pass  # not being able to save should never crash the chat
+            pass  
 
-    # ------------------------------------------------------------ replies built from the match
+    # replies built from the match
     def _remember_name(self, match):
         self.user_name = match.group(1)[:MAX_NAME_LENGTH].capitalize()
         self._save_memory()
@@ -113,7 +112,7 @@ class RuleBot:
         return "Okay, I've forgotten your name."
 
     def _how_are_you(self, match):
-        self._pending = "mood"  # the next message is probably the user's answer
+        self._pending = "mood"  
         return self._pick(R.HOW_ARE_YOU)
 
     def _tell_time(self, match):
@@ -128,7 +127,7 @@ class RuleBot:
     def _roll_die(self, match):
         return f"You rolled a {self._rng.randint(1, 6)}."
 
-    # ------------------------------------------------------------ understanding the message
+    # understanding the message
     @staticmethod
     def _normalize(text):
         """Lowercase, drop punctuation (keeping apostrophes and math symbols), squash spaces."""
@@ -167,7 +166,7 @@ class RuleBot:
             return None
         expression = match.group(1).strip()
         if not re.search(r"[+\-*/%^]", expression):
-            return None  # just a number, not a calculation
+            return None
         try:
             return f"{expression} = {format_number(calculate(expression))}"
         except CalculatorError as error:
@@ -192,7 +191,7 @@ class RuleBot:
                 return response(match) if callable(response) else self._pick(response)
         return None
 
-    # ------------------------------------------------------------ public API
+    # public API
     def _pick(self, options):
         """Choose a reply, avoiding the one just used when there is a choice."""
         choices = [option for option in options if option != self._last_reply] or list(options)
