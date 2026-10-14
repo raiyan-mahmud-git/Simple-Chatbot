@@ -1,4 +1,4 @@
-"""Everything the bot can say. Edit this file to change or add replies."""
+
 
 GREETINGS = [
     "Hello! How can I help you today?",
@@ -54,5 +54,5 @@ FALLBACKS = [
     "I'm not sure I follow, could you rephrase that?",
     "Interesting... go on.",
 ]
-# Shown after several confusing messages in a row
+
 STUCK = ["I keep getting lost. Type 'help' to see what I can do."]
