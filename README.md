@@ -109,7 +109,3 @@ The tests cover matching, typos, name memory (including corrupt files), the calc
 - It only understands what its patterns cover. Anything else gets a generic reply.
 - Typo fixing only covers a few keywords, not whole sentences.
 - It is English only and has no real understanding of meaning.
-
-## About this project
-
-I wrote the first version of this chatbot myself. I later rebuilt it with help from Claude, an AI assistant made by Anthropic, which found bugs in the original matching, added the new features, restructured it into a package and wrote the tests.
