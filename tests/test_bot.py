@@ -15,14 +15,14 @@ def make_bot(**kwargs):
     return RuleBot(clock=lambda: FIXED_TIME, rng=random.Random(0), **kwargs)
 
 
-# ---------------------------------------------------------------- matching
+# matching
 def test_greeting():
     assert make_bot().reply("hello") in R.GREETINGS
     assert make_bot().reply("Hey!!!") in R.GREETINGS
 
 
 def test_patterns_match_whole_words_only():
-    # The first version matched "hi" inside "this" and "which" and greeted the user
+    
     for message in ["this is nice", "which one", "I was thinking about it"]:
         assert make_bot().reply(message) in R.FALLBACKS
 
@@ -47,7 +47,7 @@ def test_no_immediate_repeats():
     assert all(a != b for a, b in zip(replies, replies[1:]))
 
 
-# ---------------------------------------------------------------- typos
+# typos
 def test_typos_in_keywords_are_understood():
     assert make_bot().reply("whats the wether") in R.WEATHER
     assert make_bot().reply("tell me a jokee") in R.JOKES
@@ -58,18 +58,18 @@ def test_real_words_are_not_rewritten():
     bot = make_bot()
     for word in ["whether", "watcher", "water", "computer", "quite", "other"]:
         assert bot._fix_typos(word) == word
-    # "whether" must not trigger the weather rule
+    
     assert make_bot().reply("I wonder whether it works") in R.FALLBACKS
 
 
-# ---------------------------------------------------------------- time and date
+# time and date
 def test_time_and_date_use_the_clock():
     bot = make_bot()
     assert bot.reply("what time is it") == "It's 03:45 PM."
     assert bot.reply("what's the date?") == "Today is Tuesday, October 13, 2026."
 
 
-# ---------------------------------------------------------------- name memory
+# name memory
 def test_remembers_name_within_a_chat():
     bot = make_bot()
     assert "Sam" in bot.reply("my name is sam")
@@ -108,7 +108,7 @@ def test_no_memory_file_means_nothing_is_saved():
     assert make_bot().user_name is None
 
 
-# ---------------------------------------------------------------- math
+# math
 def test_math_in_symbols_and_words():
     bot = make_bot()
     assert bot.reply("calculate 5 + 3 * 2") == "5 + 3 * 2 = 11"
@@ -129,7 +129,7 @@ def test_numbers_alone_are_not_calculations():
     assert make_bot().reply("42") in R.FALLBACKS
 
 
-# ---------------------------------------------------------------- mood follow-up
+# mood follow-up
 def test_mood_follow_up():
     bot = make_bot()
     assert bot.reply("how are you") in R.HOW_ARE_YOU
@@ -150,11 +150,11 @@ def test_mood_answer_only_counts_right_after_the_question():
 
     bot = make_bot()
     bot.reply("how are you")
-    assert bot.reply("what is the weather") in R.WEATHER  # moved on to another topic
-    assert bot.reply("good") in R.FALLBACKS  # the question is no longer open
+    assert bot.reply("what is the weather") in R.WEATHER
+    assert bot.reply("good") in R.FALLBACKS
 
 
-# ---------------------------------------------------------------- fun and fallbacks
+# fun and fallbacks
 def test_coin_and_die():
     bot = make_bot()
     assert bot.reply("flip a coin") in ("It's heads!", "It's tails!")
@@ -166,7 +166,7 @@ def test_suggests_help_when_stuck():
     replies = [bot.reply(message) for message in ["blah", "bleh", "blorp"]]
     assert replies[0] in R.FALLBACKS and replies[1] in R.FALLBACKS
     assert replies[2] in R.STUCK
-    assert bot.reply("blip") in R.FALLBACKS  # the counter starts over
+    assert bot.reply("blip") in R.FALLBACKS
 
 
 def test_understood_message_resets_the_stuck_counter():
@@ -177,7 +177,7 @@ def test_understood_message_resets_the_stuck_counter():
     assert bot.reply("blorp") in R.FALLBACKS
 
 
-# ---------------------------------------------------------------- exiting
+# exiting
 def test_exit_needs_whole_words_in_short_messages():
     bot = make_bot()
     for message in ["bye", "Goodbye!", "see you later", "quit", "I quit", "goodby"]:
@@ -186,7 +186,7 @@ def test_exit_needs_whole_words_in_short_messages():
         assert not bot.is_exit(message), message
 
 
-# ---------------------------------------------------------------- the chat loop
+# the chat loop
 def run_chat(inputs, **kwargs):
     lines = iter(inputs)
     output = []
